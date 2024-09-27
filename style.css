@@ -5,6 +5,7 @@
   --muted: #6e6a63;
   --line: #e6e1d6;
   --accent: #b94f1d;
+  --danger: #a62828;
 }
 
 * { box-sizing: border-box; }
@@ -63,6 +64,12 @@ button.ghost {
   border: 1px solid var(--line);
 }
 
+button.danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
 main {
   max-width: 820px;
   margin: 0 auto;
@@ -85,6 +92,12 @@ main {
   border-radius: 8px;
   padding: 14px 16px;
   cursor: pointer;
+  transition: transform 0.08s ease, border-color 0.08s ease;
+}
+
+.recipe-list li:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
 }
 
 .recipe-list h3 {
@@ -158,4 +171,67 @@ legend {
 .form-actions {
   display: flex;
   gap: 10px;
+}
+
+/* detail */
+.detail-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.detail-actions { display: flex; gap: 8px; }
+
+.detail h2 {
+  margin: 0 0 4px;
+  font-size: 1.8rem;
+}
+
+.detail .meta-line {
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.scale-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+}
+
+.scale-box input {
+  width: 70px;
+}
+
+.scale-note {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.detail h3 {
+  margin: 24px 0 8px;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.detail ul.ingredients {
+  padding-left: 20px;
+}
+
+.detail ul.ingredients li {
+  margin-bottom: 4px;
+}
+
+.detail ol.steps {
+  padding-left: 22px;
+}
+
+.detail ol.steps li {
+  margin-bottom: 10px;
 }

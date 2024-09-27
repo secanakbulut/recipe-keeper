@@ -20,7 +20,7 @@
 
     <section id="formView" class="view hidden">
       <form id="recipeForm" class="form">
-        <h2>new recipe</h2>
+        <h2 id="formTitle">new recipe</h2>
 
         <label>title
           <input name="title" required>
@@ -54,6 +54,20 @@
           <button type="button" id="cancelBtn" class="ghost">cancel</button>
         </div>
       </form>
+    </section>
+
+    <section id="detailView" class="view hidden">
+      <div class="detail-head">
+        <button id="backBtn" type="button" class="ghost">&larr; back</button>
+        <div class="detail-actions">
+          <button id="editBtn" type="button" class="ghost">edit</button>
+          <button id="deleteBtn" type="button" class="danger">delete</button>
+        </div>
+      </div>
+
+      <article id="detailBody" class="detail">
+        <!-- filled by js -->
+      </article>
     </section>
   </main>
 
