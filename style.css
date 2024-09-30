@@ -8,6 +8,18 @@
   --danger: #a62828;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1a17;
+    --card: #25221e;
+    --ink: #f1ece2;
+    --muted: #9a948a;
+    --line: #36322c;
+    --accent: #e07a45;
+    --danger: #d96565;
+  }
+}
+
 * { box-sizing: border-box; }
 
 html, body {
@@ -21,8 +33,10 @@ html, body {
 
 .topbar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   padding: 18px 24px;
   border-bottom: 1px solid var(--line);
   background: var(--card);
@@ -32,6 +46,13 @@ html, body {
   font-size: 1.4rem;
   margin: 0;
   font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 input, select, textarea, button {
@@ -39,13 +60,15 @@ input, select, textarea, button {
   color: inherit;
 }
 
-input[type="text"], input[type="number"], textarea, input:not([type]) {
+input[type="search"], input[type="text"], input[type="number"], select, textarea, input:not([type]) {
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 6px;
   padding: 7px 10px;
   color: var(--ink);
 }
+
+input[type="search"] { min-width: 240px; }
 
 button {
   background: var(--ink);
@@ -110,6 +133,17 @@ main {
   font-size: 0.88rem;
 }
 
+.tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  margin-right: 4px;
+  color: var(--muted);
+}
+
 .empty {
   color: var(--muted);
   font-style: italic;
@@ -134,6 +168,10 @@ main {
   gap: 4px;
   font-size: 0.9rem;
   color: var(--muted);
+}
+
+.form label input, .form label textarea {
+  color: var(--ink);
 }
 
 .form .row {
@@ -234,4 +272,13 @@ legend {
 
 .detail ol.steps li {
   margin-bottom: 10px;
+}
+
+/* print */
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; color: black; }
+  main { padding: 0; max-width: none; }
+  .detail { font-size: 11pt; }
+  .scale-box { display: none; }
 }

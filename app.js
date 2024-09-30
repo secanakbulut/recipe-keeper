@@ -40,6 +40,7 @@ function uid() {
 function fmtAmount(n) {
   if (!isFinite(n)) return "";
   const r = Math.round(n * 100) / 100;
+  // toFixed then strip
   let s = r.toFixed(2);
   if (s.indexOf(".") >= 0) {
     s = s.replace(/0+$/, "").replace(/\.$/, "");
@@ -52,27 +53,57 @@ function show(name) {
   views[name].classList.remove("hidden");
 }
 
-// list
+// ---- list view ----
 
 function renderList() {
+  const q = $("#search").value.trim().toLowerCase();
+  const tag = $("#tagFilter").value;
+
+  const filtered = recipes.filter(r => {
+    if (tag && !(r.tags || []).includes(tag)) return false;
+    if (!q) return true;
+    if (r.title.toLowerCase().includes(q)) return true;
+    return (r.ingredients || []).some(i => (i.name || "").toLowerCase().includes(q));
+  });
+
   const ul = $("#recipeList");
   ul.innerHTML = "";
 
-  for (const r of recipes) {
+  for (const r of filtered) {
     const li = document.createElement("li");
     li.dataset.id = r.id;
+    const tagHtml = (r.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("");
     li.innerHTML = `
       <h3>${escapeHtml(r.title)}</h3>
       <div class="meta">${r.servings} servings &middot; ${r.time || 0} min</div>
+      <div>${tagHtml}</div>
     `;
     li.addEventListener("click", () => openDetail(r.id));
     ul.appendChild(li);
   }
 
-  $("#emptyMsg").style.display = recipes.length ? "none" : "block";
+  $("#emptyMsg").style.display = filtered.length ? "none" : "block";
+  if (recipes.length && !filtered.length) {
+    $("#emptyMsg").textContent = "nothing matches your search.";
+  } else if (!recipes.length) {
+    $("#emptyMsg").textContent = 'no recipes yet. hit "new recipe" to add one.';
+  }
+
+  refreshTagFilter();
 }
 
-// form
+function refreshTagFilter() {
+  const sel = $("#tagFilter");
+  const current = sel.value;
+  const all = new Set();
+  recipes.forEach(r => (r.tags || []).forEach(t => all.add(t)));
+  const sorted = [...all].sort();
+  sel.innerHTML = '<option value="">all tags</option>' +
+    sorted.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
+  if (sorted.includes(current)) sel.value = current;
+}
+
+// ---- form ----
 
 function openForm(recipe) {
   editingId = recipe ? recipe.id : null;
@@ -135,7 +166,7 @@ function readForm() {
   };
 }
 
-// detail
+// ---- detail ----
 
 function openDetail(id) {
   const r = recipes.find(x => x.id === id);
@@ -161,7 +192,7 @@ function renderDetail(r, scaleServings) {
     <h2>${escapeHtml(r.title)}</h2>
     <div class="meta-line">${r.time || 0} min &middot; ${tagHtml}</div>
 
-    <div class="scale-box">
+    <div class="scale-box no-print">
       <label for="scaleInput">servings</label>
       <input id="scaleInput" type="number" min="1" step="1" value="${scaleServings}">
       <span class="scale-note">original: ${r.servings}${factor !== 1 ? ` (x${fmtAmount(factor)})` : ""}</span>
@@ -183,6 +214,8 @@ function renderDetail(r, scaleServings) {
   }
 }
 
+// ---- helpers ----
+
 function escapeHtml(s) {
   return String(s ?? "")
     .replace(/&/g, "&amp;")
@@ -193,7 +226,7 @@ function escapeAttr(s) {
   return escapeHtml(s).replace(/"/g, "&quot;");
 }
 
-// wire up
+// ---- wire up ----
 
 $("#newBtn").addEventListener("click", () => openForm(null));
 $("#cancelBtn").addEventListener("click", () => { editingId = null; show("list"); });
@@ -212,11 +245,15 @@ $("#recipeForm").addEventListener("submit", e => {
   show("list");
 });
 
+$("#search").addEventListener("input", renderList);
+$("#tagFilter").addEventListener("change", renderList);
+
 $("#backBtn").addEventListener("click", () => { openId = null; show("list"); });
 $("#editBtn").addEventListener("click", () => {
   const r = recipes.find(x => x.id === openId);
   if (r) openForm(r);
 });
+$("#printBtn").addEventListener("click", () => window.print());
 $("#deleteBtn").addEventListener("click", () => {
   if (!openId) return;
   if (!confirm("delete this recipe?")) return;
@@ -227,4 +264,5 @@ $("#deleteBtn").addEventListener("click", () => {
   show("list");
 });
 
+// TODO: import/export json some day
 renderList();

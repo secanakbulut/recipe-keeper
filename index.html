@@ -7,9 +7,15 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="topbar">
+  <header class="topbar no-print">
     <h1>recipe keeper</h1>
-    <button id="newBtn" type="button">new recipe</button>
+    <div class="controls">
+      <input id="search" type="search" placeholder="search title or ingredient">
+      <select id="tagFilter">
+        <option value="">all tags</option>
+      </select>
+      <button id="newBtn" type="button">new recipe</button>
+    </div>
   </header>
 
   <main>
@@ -57,10 +63,11 @@
     </section>
 
     <section id="detailView" class="view hidden">
-      <div class="detail-head">
+      <div class="detail-head no-print">
         <button id="backBtn" type="button" class="ghost">&larr; back</button>
         <div class="detail-actions">
           <button id="editBtn" type="button" class="ghost">edit</button>
+          <button id="printBtn" type="button" class="ghost">print</button>
           <button id="deleteBtn" type="button" class="danger">delete</button>
         </div>
       </div>
