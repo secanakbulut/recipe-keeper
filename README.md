@@ -1,5 +1,7 @@
 # recipe keeper
 
+![](docs/screenshot.png)
+
 a small recipe app i built so i could stop having half my dinner ideas in screenshots and the other half on a notes app i never open.
 
 it does the basics. you save a recipe with ingredients and steps, you can search by title or by ingredient, and there is a servings input on the recipe page that rescales the amounts. that last bit was the actual reason i made it. i kept doubling pasta recipes by hand and getting it wrong.
